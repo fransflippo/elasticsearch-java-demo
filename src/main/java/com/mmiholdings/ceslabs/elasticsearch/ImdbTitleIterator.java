@@ -70,8 +70,7 @@ public class ImdbTitleIterator implements Iterator<ImdbTitle> {
             ImdbTitle title = new ImdbTitle();
             title.setId(cols[0]);
             title.setType(cols[1]);
-            title.setPrimaryTitle(cols[2]);
-            title.setOriginalTitle(cols[3]);
+            title.setTitle(new ImdbTitle.Title(cols[2], cols[3]));
             title.setAdult(toBoolean(cols[4]));
             title.setStartYear(toNumber(cols[5]));
             title.setEndYear(toNumber(cols[6]));

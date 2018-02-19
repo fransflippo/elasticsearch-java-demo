@@ -2,11 +2,15 @@ package com.mmiholdings.ceslabs.elasticsearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +36,9 @@ public class ImdbImporter {
     }
 
     public static void main(String[] argv) throws IOException {
-        new ImdbImporter().indexTitles();
+        ImdbImporter imdbImporter = new ImdbImporter();
+        imdbImporter.indexTitles();
+        imdbImporter.searchMovieByTitle("Avenger Infinity");
     }
 
     public void indexTitles() throws IOException {
@@ -62,4 +68,11 @@ public class ImdbImporter {
         }
     }
 
+    public void searchMovieByTitle(String title) {
+        MatchQueryBuilder query = QueryBuilders.matchQuery("title.original", title);
+        SearchResponse imdb = client.prepareSearch("imdb").setQuery(query).get();
+        for (SearchHit documentFields : imdb.getHits().getHits()) {
+            System.out.println(documentFields);
+        }
+    }
 }

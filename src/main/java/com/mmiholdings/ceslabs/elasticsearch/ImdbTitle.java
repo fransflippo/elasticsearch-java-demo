@@ -19,8 +19,7 @@ import java.util.List;
 public class ImdbTitle {
     private String id;
     private String type;
-    private String primaryTitle;
-    private String originalTitle;
+    private Title title;
     private boolean adult;
     private Integer startYear;
     private Integer endYear;
@@ -43,20 +42,12 @@ public class ImdbTitle {
         return type;
     }
 
-    public void setPrimaryTitle(String primaryTitle) {
-        this.primaryTitle = primaryTitle;
+    public void setTitle(Title title) {
+        this.title = title;
     }
 
-    public String getPrimaryTitle() {
-        return primaryTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
+    public Title getTitle() {
+        return title;
     }
 
     public void setAdult(boolean adult) {
@@ -101,6 +92,24 @@ public class ImdbTitle {
     }
 
     public String toString() {
-        return originalTitle + " (" + startYear + ")";
+        return title.getOriginal() + " (" + startYear + ")";
+    }
+
+    public static class Title {
+        private final String primary;
+        private final String original;
+
+        public Title(String primary, String original) {
+            this.primary = primary;
+            this.original = original;
+        }
+
+        public String getPrimary() {
+            return primary;
+        }
+
+        public String getOriginal() {
+            return original;
+        }
     }
 }
