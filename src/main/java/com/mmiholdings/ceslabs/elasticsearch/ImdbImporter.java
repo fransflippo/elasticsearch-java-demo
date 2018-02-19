@@ -37,7 +37,6 @@ public class ImdbImporter {
 
     public static void main(String[] argv) throws IOException {
         ImdbImporter imdbImporter = new ImdbImporter();
-        imdbImporter.indexTitles();
         imdbImporter.searchMovieByTitle("Avenger Infinity");
     }
 
@@ -69,10 +68,21 @@ public class ImdbImporter {
     }
 
     public void searchMovieByTitle(String title) {
+
         MatchQueryBuilder query = QueryBuilders.matchQuery("title.original", title);
-        SearchResponse imdb = client.prepareSearch("imdb").setQuery(query).get();
+
+        System.out.println("Query:");
+        System.out.println(query);
+
+        SearchResponse imdb = client.prepareSearch("imdb").setSize(50).setFrom(51).setQuery(query).get();
         for (SearchHit documentFields : imdb.getHits().getHits()) {
-            System.out.println(documentFields);
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                ImdbTitle imdbTitle = objectMapper.readValue(documentFields.getSourceAsString(), ImdbTitle.class);
+                logger.info("{}", imdbTitle);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

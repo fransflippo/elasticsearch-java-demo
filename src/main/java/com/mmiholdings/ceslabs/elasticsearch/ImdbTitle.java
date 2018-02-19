@@ -96,8 +96,10 @@ public class ImdbTitle {
     }
 
     public static class Title {
-        private final String primary;
-        private final String original;
+        private String primary;
+        private String original;
+
+        public Title() { }
 
         public Title(String primary, String original) {
             this.primary = primary;
